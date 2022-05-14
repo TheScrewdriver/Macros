@@ -1,0 +1,22 @@
+#!/bin/bash
+
+for name; do
+	if [ -z "$name" ]; then
+		echo "You must provide a file name header as first argument" 1>&2
+		exit 1
+	fi
+done
+
+for name; do
+	if [[ "$name" == *".h"* ]]; then
+		define_name=$(echo $name | tr a-z A-Z | tr . _)
+		echo "#ifndef $define_name" >> $name
+		echo "# define $define_name" >> $name
+		echo "#endif" >> $name
+	elif [[ "$name" == *".c"* ]]; then
+		echo -e "#include <stdlib.h>\n" >> $name
+		echo -e "int	main(int ac, char **av)\n{\n\treturn (EXIT_SUCCESS);\n}" >> $name
+	fi
+done
+
+exit 0
