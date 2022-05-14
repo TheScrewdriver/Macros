@@ -8,14 +8,17 @@ for name; do
 done
 
 for name; do
+
+vim -e -c "exe 'Stdheader' | exe 'd' | exe 'x'" "$name"
+
 	if [[ "$name" == *".h"* ]]; then
-		define_name=$(echo $name | tr a-z A-Z | tr . _)
-		echo "#ifndef $define_name" >> $name
-		echo "# define $define_name" >> $name
-		echo "#endif" >> $name
+		define_name=$(echo "$name" | tr a-z A-Z | tr . _)
+		echo "#ifndef $define_name" >> "$name"
+		echo -e "# define $define_name\n" >> "$name"
+		echo "#endif" >> "$name"
 	elif [[ "$name" == *".c"* ]]; then
-		echo -e "#include <stdlib.h>\n" >> $name
-		echo -e "int	main(int ac, char **av)\n{\n\treturn (EXIT_SUCCESS);\n}" >> $name
+		echo -e "#include <stdlib.h>\n" >> "$name"
+		echo -e "int	main(int ac, char **av)\n{\n\treturn (EXIT_SUCCESS);\n}" >> "$name"
 	fi
 done
 
