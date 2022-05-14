@@ -1,22 +1,18 @@
 #!/bin/bash
 
 for name; do
-	if [ -z "$name" ]; then
-		echo "You must provide a file name header as first argument" 1>&2
-		exit 1
+
+	if [ ! -f "$name" ]; then
+		touch "$name"
 	fi
-done
-
-for name; do
-
-vim -e -c "exe 'Stdheader' | exe 'd' | exe 'x'" "$name"
-
 	if [[ "$name" == *".h"* ]]; then
+		vim -e -c "exe 'Stdheader' | exe 'd' | exe 'x'" "$name"
 		define_name=$(echo "$name" | tr a-z A-Z | tr . _)
 		echo "#ifndef $define_name" >> "$name"
 		echo -e "# define $define_name\n" >> "$name"
 		echo "#endif" >> "$name"
 	elif [[ "$name" == *".c"* ]]; then
+		vim -e -c "exe 'Stdheader' | exe 'd' | exe 'x'" "$name"
 		echo -e "#include <stdlib.h>\n" >> "$name"
 		echo -e "int	main(int ac, char **av)\n{\n\treturn (EXIT_SUCCESS);\n}" >> "$name"
 	fi
